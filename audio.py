@@ -3,6 +3,7 @@ import numpy as np
 import scipy
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
+from scipy.io.wavfile import write
 
 
 # PlaySound
@@ -53,17 +54,28 @@ filter_size = 3
 z = int((filter_size - 1)/2)
 
 # Median filter for each value
+k = 0
+recovered_signal =[]
 for k in range(len(detection_signal)):
     i = detection_signal[k]
     inp_list = data[i - z: i + (z + 1)]
     padded_list1 = zero_append(filter_size)
-    # print(padded_list1)
     median_list1 = median(padded_list1)
-    print(np.array(median_list1))
+    data[i - z: i + (z + 1)] = median_list1
+length = data.shape[0] / samplerate
+time = np.linspace(0., length, data.shape[0])
+plt.figure(figsize=(15, 5))
+plt.plot(time, data, label="Recovered Signal")
+plt.xlabel("Time [s]")
+plt.ylabel("Amplitude")
+plt.show()
+write("recovered2.wav", samplerate, data.astype(np.int16))
 
-# Median filter with inbuilt function
+
 for k in range(len(detection_signal)):
     i = detection_signal[k]
     inp_list = data[i - z: i + (z + 1)]
     test_list = scipy.signal.medfilt(inp_list, kernel_size=3)
-    print(test_list)
+
+check = np.array_equal(median_list1, test_list)
+print(check)
