@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 import scipy.io
 from scipy.io.wavfile import write
 from scipy.interpolate import CubicSpline
+from datetime import datetime
+from time import sleep
+from tqdm import tqdm
 
 def plot(data):
     length = data.shape[0] / samplerate_new
@@ -58,18 +61,28 @@ y = np.delete(data_deg, actual_click)
 x = np.delete(index_deg, actual_click)
 # print(x)
 
+
+start_time = datetime.now()
+
 # Dupicating degraded data 
 cubic_splined_data = data_deg
 
-# Applying the cubic spline function
-cs = CubicSpline(x, y, bc_type = 'natural')
+for z in tqdm(range(100)):
+  # Applying the cubic spline function
+  cs = CubicSpline(x, y, bc_type = 'natural')
 
 #Training the clicked 
 for i in range(click_num):
   cubic_splined_data[actual_click[i]] = cs(actual_click)[i]
 
+
+end_time = datetime.now()
+durationTime = end_time - start_time
+print('Done')
+print("The duration for the cubic spline filter is" + str(durationTime))
+
 #Plotting the cubic spline data
-b = plot(cubic_splined_data)
+plt.plot(cubic_splined_data)
 write("restored_cubic.wav", samplerate_new, cubic_splined_data.astype(np.int16)) 
 
 #Calculating mean square error
