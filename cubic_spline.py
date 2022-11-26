@@ -1,3 +1,5 @@
+#upload error_points.mat, degraded_less, original,  restored_less
+
 #Importing libraries
 from sklearn.metrics import mean_squared_error
 from scipy.io import wavfile
