@@ -1,6 +1,6 @@
-#upload error_points.mat, degraded_less, original,  restored_less
+# upload error_points.mat, degraded.wav, original.wav
 
-#Importing libraries
+# ---------------------------------Importing libraries----------------------------------------------
 from sklearn.metrics import mean_squared_error
 from scipy.io import wavfile
 import numpy as np
@@ -12,30 +12,51 @@ from scipy.interpolate import CubicSpline
 from datetime import datetime
 from time import sleep
 from tqdm import tqdm
+from playsound import playsound
 
-def plot(data):
-    length = data.shape[0] / samplerate_new
+# -----------------------------------Defining functions ---------------------------------------------
+
+
+def plot(data, samplerate):
+    '''
+
+    Takes data and sample rate of the given signal and returns the plotted graph of the signal
+
+    Args:
+        data(array) : an array which contains the audio data to be plotted
+
+    Returns:
+        plt.show() : the matplotlib function which displays the graph of the data
+
+    '''
+    # '''length and breadth of the graph is calculated'''
+    length = data.shape[0] / samplerate
     time = np.linspace(0., length, data.shape[0])
+
+    # '''The size of the figure is mentioned'''
     plt.figure(figsize=(15, 5))
+
+    # '''The labels and display value is mentioned'''
     plt.plot(time, data, label="Degraded Signal")
     plt.xlabel("Time [s]")
     plt.ylabel("Amplitude")
     return plt.show()
 
-#Reading all the signals
-samplerate_new, data_new = wavfile.read("orginal.wav")
-samplerate_rec, data_rec = wavfile.read("restored_less.wav")
-samplerate_deg, data_deg = wavfile.read("degraded_less.wav")
 
-#Calculating mean square error of original and restored signal from median filter
-mse = (np.square(np.subtract(data_new, data_rec)).mean())
-print(mse)
+# -----------------------------Reading all the signals--------------------------------------------------
+samplerate_new, data_new = wavfile.read("original.wav")
+samplerate_deg, data_deg = wavfile.read("degraded.wav")
+
+# '''------------------------ Reading clicks from matlab file ------------------------------------------'''
+
+# ''' Plotting the input data '''
+inp_waveform = plot(data_deg, samplerate_deg)
 
 # Loading click point from matlab
 click_point = scipy.io.loadmat('error_points.mat')
 
 # Taking keys from matlab
-print(click_point.keys())
+# print(click_point.keys())
 
 # Extracting error signal key
 error_key = click_point['error_signal']
@@ -63,30 +84,50 @@ y = np.delete(data_deg, actual_click)
 x = np.delete(index_deg, actual_click)
 # print(x)
 
+# '''-----------------------------------CUBIC SPLINED FILTER--------------------------------------'''
 
+# '''Initiating the counter'''
 start_time = datetime.now()
 
-# Dupicating degraded data 
+# Dupicating degraded data
 cubic_splined_data = data_deg
 
+# '''The progess bar for median filter'''
 for z in tqdm(range(100)):
-  # Applying the cubic spline function
-  cs = CubicSpline(x, y, bc_type = 'natural')
+    # Applying the cubic spline function
+    cs = CubicSpline(x, y, bc_type='natural')
 
-#Training the clicked 
+# Training the clicked data with prediction of cubic_splined data
 for i in range(click_num):
-  cubic_splined_data[actual_click[i]] = cs(actual_click)[i]
+    cubic_splined_data[actual_click[i]] = cs(actual_click)[i]
 
-
+# ''' Terminating the counter's count'''
 end_time = datetime.now()
 durationTime = end_time - start_time
 print('Done')
-print("The duration for the cubic spline filter is" + str(durationTime))
+print("The duration for the cubic spline filter is " + str(durationTime))
 
-#Plotting the cubic spline data
-plt.plot(cubic_splined_data)
-write("restored_cubic.wav", samplerate_new, cubic_splined_data.astype(np.int16)) 
+# Plotting the cubic spline data
+cs_data = plot(cubic_splined_data, samplerate_new)
 
-#Calculating mean square error
+# '''Creating and playing the restored audio'''
+write("rest_c.wav", samplerate_deg, cubic_splined_data.astype(np.int16))
+
+
+# Calculating mean square error
 mse = (np.square(np.subtract(cubic_splined_data, data_new)).mean())
 print(mse)
+
+# '''--------------------------------Playing the audio --------------------------------------------------'''
+
+# '''Playing degraded signal'''
+
+print("Playing degraded audio")
+playsound("degraded_less.wav")
+
+# '''Playing restored signal'''
+
+print("Playing restored audio from cubic spline")
+playsound("rest_c.wav")
+
+# '''-----------------------------------------------------END----------------------------------------------'''
