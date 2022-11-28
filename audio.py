@@ -17,6 +17,18 @@ import unittest
 
 #''' Function to create padded array'''
 def zero_append(filter_size, half_f, inp_list):
+    '''
+    Takes in filter_size, inp_list checks whether the filter size is odd or even and builds a padded array
+
+    Args:
+        filter_size(int) : a natural number
+        half_f(int) : a natural number and number of zeros added to inp_list depending on filter_size
+        inp_list(array) : an array which contains the the degraded data value
+
+    Returns:
+        zero_padded array if the filter size is even or throws an error if filter_size is odd
+
+    '''
     if filter_size % 2 != 0:
 
         #'''This np.pad creates a require padded array for the given filter size '''
@@ -29,6 +41,16 @@ def zero_append(filter_size, half_f, inp_list):
 
 
 def median(padded_list):
+    '''
+    Takes in padded_list and returns the padded_list
+
+    Args:
+        padded_list(array) : an array which contains the padded array returned from zero_append function
+
+    Returns:
+        median_list(array) : an array which contains the median value of the given input_list
+
+    '''
     median_list = []
     for i in range(len(padded_list) - filter_size + 1):
 
@@ -47,6 +69,17 @@ def median(padded_list):
 
 
 def plot(data, samplerate):
+    '''
+    
+    Takes data and sample rate of the given signal and returns the plotted graph of the signal
+
+    Args:
+        data(array) : an array which contains the audio data to be plotted
+
+    Returns:
+        plt.show() : the matplotlib function which displays the graph of the data
+
+    '''
     # '''length and breadth of the graph is calculated'''
     length = data.shape[0] / samplerate
     time = np.linspace(0., length, data.shape[0])
@@ -64,6 +97,21 @@ def plot(data, samplerate):
 def my_median(data, actual_click, click_num, filter_size):
     myfilter_data = data
     for k in range(click_num):
+
+        '''
+        Takes data, actual clicks on data, number of clicks on data and filter size given by the user, returns the my_filtered_data 
+        which is restored signal from the clicks
+
+        Args:
+            data(array) : an array which contains the degraded audio
+            actual_click(array) : an array which contains the actual clicks on the data file, which is obtained from the matlab file
+            click_num(array): a number which has the number of clicks in the degraded audio
+            filter_size(int) : a natural number
+
+        Returns:
+            myfilter_data(array) : an array which contains audio with clicks removed
+
+        '''
         # '''inp_list is the input list created through data'''
         inp_list = data[actual_click[k] -
                         half_f: actual_click[k] + (half_f + 1)]
@@ -115,20 +163,20 @@ actual_click = click[0]
 click_num = len(actual_click)
 # print(click_num)
 
-'''-----------------------------Important parameters----------------------------------------------'''
+# '''-----------------------------Important parameters----------------------------------------------'''
 
 filter_size = 3
 half_f = int((filter_size - 1)/2)
-'''half_f is pad width and is used to extract data with given filter size'''
+# '''half_f is pad width and is used to extract data with given filter size'''
 
-'''Initiating the counter'''
+# '''Initiating the counter'''
 start_time = datetime.now()
 
-'''The progess bar for median filter'''
+# '''The progess bar for median filter'''
 for s in tqdm(range(100)):
     sleep(0.05)
 
-# '''----------------------This is the main file which acts like median filter-------------------------'''
+# '''--------------------------------Calling the filter -------------------------------------------'''
 
 myfilter_data = my_median(data, actual_click, click_num, filter_size)
 
@@ -146,6 +194,8 @@ out_waveform = plot(myfilter_data, samplerate)
 # '''Creating and playing the restored audio'''
 write("restored_less.wav", samplerate, myfilter_data.astype(np.int16))
 
+# '''--------------------------------Playing the audio -------------------------------------------'''
+
 
 # '''Playing degraded signal'''
 
@@ -159,7 +209,7 @@ playsound("restored_less.wav")
 
 # '''------------------------------------Calculating MSE  -------------------------------------------'''
 
-'''Reading the original file'''
+# '''Reading the original file'''
 samplerate_new, data_new = wavfile.read("orginal.wav")
 
 mse = (np.square(np.subtract(data_new, myfilter_data)).mean())
@@ -169,6 +219,8 @@ print("The Mean square error between the restored signal and original signal is 
 
 
 class TestFilter(unittest.TestCase):
+    '''
+    '''
     def test_length(self):
         length1 = len(myfilter_data)
         length2 = len(sysfilter_data)
@@ -181,10 +233,10 @@ class TestFilter(unittest.TestCase):
             inp_list = data2[actual_click[y] -
                              half_f: actual_click[y] + (half_f + 1)]
 
-            '''kernel_size is similar as filter_size'''
+            # '''kernel_size is similar as filter_size'''
             test_list = scipy.signal.medfilt(inp_list, kernel_size=filter_size)
 
-            '''The systems median filtered data is applied back to the signal'''
+            # '''The systems median filtered data is applied back to the signal'''
             sysfilter_data[actual_click[y] -
                            half_f: actual_click[y] + (half_f + 1)] = test_list
 
