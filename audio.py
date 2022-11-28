@@ -17,6 +17,8 @@ import unittest
 print("Playing degraded audio")
 playsound("degraded_less.wav")
 
+'''------------------------------------Defining all functions -----------------------------------------'''
+
 ''' Function to create padded array'''
 def zero_append(filter_size, half_f):
   if filter_size % 2 != 0:
@@ -57,6 +59,8 @@ def plot(data):
   plt.xlabel("Time [s]")
   plt.ylabel("Amplitude")
   return plt.show()
+
+'''---------------------Taking input from the signal ----------------------------------------------'''
 
 '''Reading data and sample rate'''
 samplerate, data = wavfile.read("degraded_less.wav")
