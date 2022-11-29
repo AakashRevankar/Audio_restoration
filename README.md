@@ -6,7 +6,7 @@ This project is built on Assignment 1 (Trinity College Dublin) of Computational 
 For more details about the project check [here](https://www.google.ie/webhp) to read the project report of Assignmnet 1.
 
 ---
-The '''degraded signal.wav''' , ```detected_signal_clicks.mat``` are extracted using the program mentioned here.
+The ```degraded signal.wav``` , ```detected_signal_clicks.mat``` are extracted using the program mentioned here.
 
 - median filtering
 - cubic splines
