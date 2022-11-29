@@ -1,4 +1,4 @@
-# Add here a title for the project
+# Audio restoration using Median filter and Cubic splines
 
 ## High-level Description of the project
 This assignment builds on Assignment I. We assume that we have successfully detected the clicks and we are applying different interpolation methods to restore the audio, such as
