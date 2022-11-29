@@ -1,7 +1,12 @@
 # Audio restoration using Median filter and Cubic splines
 
 ## High-level Description of the project
-This assignment builds on Assignment I. We assume that we have successfully detected the clicks and we are applying different interpolation methods to restore the audio, such as
+This project is built on Assignment 1(Trinity College Dublin) of Computational Methods in the M.Sc Electronic Information Engineering Course. Assignment 1 is about degrading a clean signal, detecting the clicks and filtering it using Autoregressive methods.
+
+For more details about the project check [here](https://www.google.ie/webhp) to read the project report.
+
+
+
 - median filtering
 - cubic splines
 
