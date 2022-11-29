@@ -4,6 +4,7 @@
 This project is built on Assignment 1 (Trinity College Dublin) of Computational Methods in the M.Sc Electronic Information Engineering Course. Assignment 1 is about degrading a clean signal, detecting the clicks and filtering it using Autoregressive methods.
 
 For more details about the project check [here](https://www.google.ie/webhp) to read the project report of Assignmnet 1.
+
 ---
 The degraded signal.wav , ```sh detected_signal_clicks.mat``` are extracted using the program mentioned here.
 
