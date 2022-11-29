@@ -17,7 +17,7 @@ For more details, check the report of [Assignmnet_1](https://github.com/AakashRe
 
 --- 
 
-The ```deg.wav``` (degraded_audio) , ```error_points.mat``` (detection_signal) are obtained from this [demo.m](https://github.com/AakashRevankar/Auto_regressive_filter/blob/main/demo.mp). 
+The ```deg.wav``` (degraded_audio) , ```error_points.mat``` (detection_signal) are obtained from this [demo.m](https://github.com/AakashRevankar/Auto_regressive_filter/blob/main/demo.m). 
 
  
  
