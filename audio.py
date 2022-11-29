@@ -1,6 +1,7 @@
-# upload error_points.mat, degraded.wav, original.wav
+    # upload error_points.mat, deg.wav, original.wav
 
 # ---------------------------------Importing libraries-------------------------------------------------
+import sys
 import numpy as np
 import scipy
 from scipy.io import wavfile
@@ -39,6 +40,7 @@ def zero_append(filter_size, half_f, inp_list):
 
     else:
         print(" Please give odd number for filter size ")
+        sys.exit()
 
 #'''Function to find median and create a median list'''
 
@@ -137,7 +139,7 @@ def plot(data, samplerate):
 
 # '''---------------------Taking input from the signal ------------------------------------------------'''
 # '''Reading data and sample rate'''
-samplerate, data = wavfile.read("degraded.wav")
+samplerate, data = wavfile.read("deg.wav")
 
 # ''' Creating replica of data files as not to get shuffled with different values'''
 data2 = data
@@ -171,7 +173,7 @@ click_num = len(actual_click)
 
 # '''-----------------------------Important parameters------------------------------------------------'''
 
-filter_size = 3
+filter_size = 7
 half_f = int((filter_size - 1)/2)
 # '''half_f is pad width and is used to extract data with given filter size'''
 
@@ -198,7 +200,7 @@ print("The duration for the median filter is" + str(durationTime))
 out_waveform = plot(myfilter_data, samplerate)
 
 # '''Creating and playing the restored audio'''
-write("restored.wav", samplerate, myfilter_data.astype(np.int16))
+write("res_a.wav", samplerate, myfilter_data.astype(np.int16))
 
 # '''--------------------------------Playing the audio --------------------------------------------------'''
 
@@ -206,12 +208,12 @@ write("restored.wav", samplerate, myfilter_data.astype(np.int16))
 # '''Playing degraded signal'''
 
 print("Playing degraded audio")
-playsound("degraded.wav")
+playsound("deg.wav")
 
 # '''Playing restored signal'''
 
 print("Playing restored audio")
-playsound("restored.wav")
+playsound("res_a.wav")
 
 # '''------------------------------------Calculating MSE  -----------------------------------------------'''
 

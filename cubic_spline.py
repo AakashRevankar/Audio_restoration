@@ -1,4 +1,4 @@
-# upload error_points.mat, degraded.wav, original.wav
+# upload error_points.mat, deg.wav, original.wav
 
 # ---------------------------------Importing libraries----------------------------------------------
 from sklearn.metrics import mean_squared_error
@@ -45,7 +45,7 @@ def plot(data, samplerate):
 
 # -----------------------------Reading all the signals--------------------------------------------------
 samplerate_new, data_new = wavfile.read("original.wav")
-samplerate_deg, data_deg = wavfile.read("degraded.wav")
+samplerate_deg, data_deg = wavfile.read("deg.wav")
 
 # '''------------------------ Reading clicks from matlab file ------------------------------------------'''
 
@@ -116,14 +116,14 @@ write("rest_c.wav", samplerate_deg, cubic_splined_data.astype(np.int16))
 
 # Calculating mean square error
 mse = (np.square(np.subtract(cubic_splined_data, data_new)).mean())
-print(mse)
+print("The Mean square error between the restored signal of cubic spline and original signal is ", + mse)
 
 # '''--------------------------------Playing the audio --------------------------------------------------'''
 
 # '''Playing degraded signal'''
 
 print("Playing degraded audio")
-playsound("degraded_less.wav")
+playsound("deg.wav")
 
 # '''Playing restored signal'''
 
